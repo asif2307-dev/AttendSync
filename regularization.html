@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance Regularization &amp; Missed Punches – AttendSync</title>
+  <meta name="description" content="Manage missed biometric punch regularizations, approve punch time corrections, and patch daily attendance logs.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div id="top-header-placeholder"></div>
+
+  <div class="app-container">
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-wrapper">
+      <div class="breadcrumb">
+        <span>AttendSync</span>
+        <span class="breadcrumb-separator">/</span>
+        <span>Supervisor Portal</span>
+        <span class="breadcrumb-separator">/</span>
+        <strong>Attendance Regularization</strong>
+      </div>
+
+      <div class="page-header">
+        <div class="page-title-group">
+          <h1>⏱ Attendance Regularization &amp; Missed Punches</h1>
+          <p class="page-subtitle">Review missed turnstile/biometric punch corrections, approve valid excuses, and reconcile attendance records</p>
+        </div>
+        <div class="page-actions">
+          <button type="button" class="btn btn-primary" id="openNewRegModalBtn">➕ Submit Regularization</button>
+          <a href="audit.html" class="btn btn-secondary">📋 Audit History</a>
+        </div>
+      </div>
+
+      <!-- Metric Tiles -->
+      <div class="stats-grid">
+        <div class="stat-tile tile-late">
+          <div class="stat-tile-label">Pending Requests</div>
+          <div class="stat-tile-value" id="countPendingRegs" style="color: var(--status-late);">0</div>
+          <div class="stat-tile-meta">
+            <span>Missed In/Out Swipes</span>
+            <span style="color: var(--status-late); font-weight: 700;">Needs Review</span>
+          </div>
+        </div>
+
+        <div class="stat-tile tile-present">
+          <div class="stat-tile-label">Approved &amp; Patched</div>
+          <div class="stat-tile-value" id="countApprovedRegs" style="color: var(--status-present);">0</div>
+          <div class="stat-tile-meta">
+            <span>Reconciled in Database</span>
+            <span>Active</span>
+          </div>
+        </div>
+
+        <div class="stat-tile tile-absent">
+          <div class="stat-tile-label">Rejected Requests</div>
+          <div class="stat-tile-value" id="countRejectedRegs" style="color: var(--status-absent);">0</div>
+          <div class="stat-tile-meta">
+            <span>Unverified Claims</span>
+            <span>Closed</span>
+          </div>
+        </div>
+
+        <div class="stat-tile tile-neutral">
+          <div class="stat-tile-label">Total Logged</div>
+          <div class="stat-tile-value" id="countTotalRegs">0</div>
+          <div class="stat-tile-meta">
+            <span>Audit Synchronized</span>
+            <span>Recorded</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Toolbar -->
+      <div class="filter-bar">
+        <div class="filter-item">
+          <label for="regStatusFilter">Status:</label>
+          <select id="regStatusFilter" class="form-control" style="width: 140px;">
+            <option value="ALL">All Statuses</option>
+            <option value="Pending" selected>Pending Only</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+        </div>
+
+        <div class="filter-item">
+          <label for="regDeptFilter">Department:</label>
+          <select id="regDeptFilter" class="form-control" style="width: 140px;">
+            <option value="ALL">All Departments</option>
+            <option value="IT">IT</option>
+            <option value="HR">HR</option>
+            <option value="Finance">Finance</option>
+            <option value="Sales">Sales</option>
+            <option value="Operations">Operations</option>
+          </select>
+        </div>
+
+        <div class="filter-item" style="flex: 1; min-width: 180px;">
+          <input type="text" id="regSearchInput" class="form-control" placeholder="Search employee name, ID or justification...">
+        </div>
+
+        <button type="button" class="btn btn-secondary btn-sm" id="resetRegFilterBtn">Reset</button>
+      </div>
+
+      <!-- Regularization Table Card -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <span>📋 Missed Punch Regularization Queue</span>
+            <span class="badge badge-blue" id="regCountBadge">0 Requests</span>
+          </h2>
+          <div class="card-actions">
+            <span style="font-size: 11px; color: var(--text-muted);">Approving an item immediately patches the corresponding attendance record to 'Present'</span>
+          </div>
+        </div>
+        <div class="card-body" style="padding: 0;">
+          <div class="table-responsive" style="border: none;">
+            <table class="table-custom" id="regularizationTable">
+              <thead>
+                <tr>
+                  <th style="width: 80px;">Req ID</th>
+                  <th>Emp ID</th>
+                  <th>Employee Name</th>
+                  <th>Department</th>
+                  <th>Punch Date</th>
+                  <th>Original Punch Record</th>
+                  <th>Requested Correction</th>
+                  <th>Stated Reason</th>
+                  <th>Status</th>
+                  <th>Supervisor Notes</th>
+                  <th style="text-align: center; width: 140px;">Decision</th>
+                </tr>
+              </thead>
+              <tbody id="regularizationTableBody">
+                <!-- Populated dynamically by regularization.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
+          <span>Once approved, missing punch penalty is cleared from employee risk score calculation</span>
+          <a href="monitoring.html" style="font-weight: 600;">Check Anomaly Monitor →</a>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Review Regularization Modal -->
+  <div class="modal-backdrop" id="reviewRegModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="reviewRegModalTitle">⏱ Review Regularization Request</h3>
+        <button type="button" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="reviewRegId">
+        <input type="hidden" id="reviewRegDecision">
+
+        <div style="background-color: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 14px;">
+          <div style="font-weight: 700; color: var(--color-navy); margin-bottom: 4px;" id="reviewRegEmpDetails">-</div>
+          <div style="font-size: 12px; color: var(--text-muted);" id="reviewRegDateInfo">-</div>
+          <div style="margin-top: 6px; font-size: 12px;"><strong>Original:</strong> <span id="reviewRegOriginal">-</span></div>
+          <div style="font-size: 12px;"><strong>Requested Correction:</strong> <span id="reviewRegRequested" style="color: var(--color-blue-primary); font-weight: 600;">-</span></div>
+          <div style="margin-top: 6px; font-size: 12px;"><strong>Reason:</strong> <span id="reviewRegReason">-</span></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reviewRegRemark">Supervisor Justification / Verification Remark <span class="required">*</span></label>
+          <textarea id="reviewRegRemark" class="form-control" placeholder="Enter supervisor verification note (e.g. verified with security gate register / client meeting confirmed)..." required rows="3"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary modal-close-btn">Cancel</button>
+        <button type="button" id="confirmRegDecisionBtn" class="btn btn-primary">Confirm Decision</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Submit New Regularization Modal -->
+  <div class="modal-backdrop" id="newRegModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">➕ Submit Attendance Regularization Request</h3>
+        <button type="button" class="modal-close-btn">&times;</button>
+      </div>
+      <form id="newRegForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="newRegEmpSelect">Select Employee <span class="required">*</span></label>
+            <select id="newRegEmpSelect" class="form-control" required>
+              <!-- Populated by regularization.js -->
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="newRegDate">Date of Missed Punch <span class="required">*</span></label>
+              <input type="date" id="newRegDate" class="form-control" required value="2026-09-20">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="newRegType">Punch To Correct <span class="required">*</span></label>
+              <select id="newRegType" class="form-control" required>
+                <option value="OUT">Missed Check-Out Swipe</option>
+                <option value="IN">Missed Check-In Swipe</option>
+                <option value="BOTH">Missed Both Swipes (On-duty)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="newRegCorrectIn">Correct Check-In Time</label>
+              <input type="text" id="newRegCorrectIn" class="form-control" value="09:00 AM">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="newRegCorrectOut">Correct Check-Out Time</label>
+              <input type="text" id="newRegCorrectOut" class="form-control" value="06:00 PM">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="newRegReasonInput">Reason for Missed Swipe <span class="required">*</span></label>
+            <textarea id="newRegReasonInput" class="form-control" placeholder="e.g. Card scanner malfunction, offsite client presentation, turnstile gate congestion..." required rows="2"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary modal-close-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Submit Regularization</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/regularization.js"></script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supervisor Audit Trail &amp; Action Logs – AttendSync</title>
+  <meta name="description" content="Chronological system audit trail recording all supervisor actions, decisions, and database events.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div id="top-header-placeholder"></div>
+
+  <div class="app-container">
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-wrapper">
+      <div class="breadcrumb">
+        <span>AttendSync</span>
+        <span class="breadcrumb-separator">/</span>
+        <span>Supervisor Portal</span>
+        <span class="breadcrumb-separator">/</span>
+        <strong>System Audit Trail</strong>
+      </div>
+
+      <div class="page-header">
+        <div class="page-title-group">
+          <h1>📋 Supervisor Audit Log &amp; Event Trail</h1>
+          <p class="page-subtitle">Chronological, tamper-evident record of all attendance modifications, warnings, approvals &amp; database transactions</p>
+        </div>
+        <div class="page-actions">
+          <button type="button" class="btn btn-secondary" id="exportAuditCsvBtn">📥 Export Audit Log</button>
+          <a href="dashboard.html" class="btn btn-primary">📊 Back to Dashboard</a>
+        </div>
+      </div>
+
+      <!-- Filter Toolbar -->
+      <div class="filter-bar">
+        <div class="filter-item">
+          <label for="auditActionFilter">Action Category:</label>
+          <select id="auditActionFilter" class="form-control" style="width: 180px;">
+            <option value="ALL">All Supervisor Actions</option>
+            <option value="Attendance">Attendance Marked</option>
+            <option value="Warning">Warning / Follow-up</option>
+            <option value="Leave">Leave Approvals</option>
+            <option value="Regularization">Regularization Patches</option>
+            <option value="Employee">Employee CRUD</option>
+            <option value="Shift">Shift Changes</option>
+          </select>
+        </div>
+
+        <div class="filter-item" style="flex: 1; min-width: 200px;">
+          <input type="text" id="auditSearchInput" class="form-control" placeholder="Search by Employee, Action or Details...">
+        </div>
+
+        <button type="button" class="btn btn-secondary btn-sm" id="resetAuditFilterBtn">Reset</button>
+      </div>
+
+      <!-- Audit Table Card -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <span>📋 System Activity Trail</span>
+            <span class="badge badge-blue" id="auditCountBadge">0 Entries</span>
+          </h2>
+          <div class="card-actions">
+            <span style="font-size: 11px; color: var(--text-muted);">Timestamped for regulatory and HR compliance</span>
+          </div>
+        </div>
+        <div class="card-body" style="padding: 0;">
+          <div class="table-responsive" style="border: none;">
+            <table class="table-custom" id="auditTable">
+              <thead>
+                <tr>
+                  <th style="width: 80px;">Log ID</th>
+                  <th style="width: 150px;">Timestamp</th>
+                  <th>Supervisor / User</th>
+                  <th>Action Performed</th>
+                  <th>Target Employee / Scope</th>
+                  <th>Detailed Operation Summary &amp; Notes</th>
+                </tr>
+              </thead>
+              <tbody id="auditTableBody">
+                <!-- Populated dynamically by audit.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
+          <span id="auditFooterText">Showing all audit entries</span>
+          <span style="font-size: 11px; color: var(--text-muted);">Database Management Audit Log</span>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/audit.js"></script>
+</body>
+</html>

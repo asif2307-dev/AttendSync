@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leave Management &amp; Approvals – AttendSync</title>
+  <meta name="description" content="Manage employee leave requests, approve or reject applications, view leave balances and sync with attendance logs.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div id="top-header-placeholder"></div>
+
+  <div class="app-container">
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-wrapper">
+      <div class="breadcrumb">
+        <span>AttendSync</span>
+        <span class="breadcrumb-separator">/</span>
+        <span>Supervisor Portal</span>
+        <span class="breadcrumb-separator">/</span>
+        <strong>Leave Requests &amp; Balances</strong>
+      </div>
+
+      <div class="page-header">
+        <div class="page-title-group">
+          <h1>📝 Leave Management &amp; Supervisor Approvals</h1>
+          <p class="page-subtitle">Review employee leave applications, execute approvals/rejections, and maintain department coverage</p>
+        </div>
+        <div class="page-actions">
+          <button type="button" class="btn btn-primary" id="openNewLeaveModalBtn">➕ Apply Leave on Behalf</button>
+          <a href="reports.html" class="btn btn-secondary">📄 Leave Report</a>
+        </div>
+      </div>
+
+      <!-- Leave Metric Tiles -->
+      <div class="stats-grid">
+        <div class="stat-tile tile-late">
+          <div class="stat-tile-label">Pending Approval</div>
+          <div class="stat-tile-value" id="countPendingLeaves" style="color: var(--status-late);">0</div>
+          <div class="stat-tile-meta">
+            <span>Awaiting Decision</span>
+            <span style="font-weight: 700; color: var(--status-late);">Action Required</span>
+          </div>
+        </div>
+
+        <div class="stat-tile tile-present">
+          <div class="stat-tile-label">Approved This Month</div>
+          <div class="stat-tile-value" id="countApprovedLeaves" style="color: var(--status-present);">0</div>
+          <div class="stat-tile-meta">
+            <span>Synced to Attendance</span>
+            <span>Active</span>
+          </div>
+        </div>
+
+        <div class="stat-tile tile-absent">
+          <div class="stat-tile-label">Rejected Requests</div>
+          <div class="stat-tile-value" id="countRejectedLeaves" style="color: var(--status-absent);">0</div>
+          <div class="stat-tile-meta">
+            <span>Staffing Conflicts</span>
+            <span>Archived</span>
+          </div>
+        </div>
+
+        <div class="stat-tile tile-neutral">
+          <div class="stat-tile-label">Total Applications</div>
+          <div class="stat-tile-value" id="countTotalLeaves">0</div>
+          <div class="stat-tile-meta">
+            <span>Current Cycle</span>
+            <span>Recorded</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Toolbar -->
+      <div class="filter-bar">
+        <div class="filter-item">
+          <label for="leaveStatusFilter">Status:</label>
+          <select id="leaveStatusFilter" class="form-control" style="width: 140px;">
+            <option value="ALL">All Statuses</option>
+            <option value="Pending" selected>Pending Only</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+        </div>
+
+        <div class="filter-item">
+          <label for="leaveTypeFilter">Leave Type:</label>
+          <select id="leaveTypeFilter" class="form-control" style="width: 150px;">
+            <option value="ALL">All Leave Types</option>
+            <option value="Sick Leave">Sick Leave</option>
+            <option value="Casual Leave">Casual Leave</option>
+            <option value="Privilege Leave">Privilege Leave</option>
+            <option value="Emergency Leave">Emergency Leave</option>
+          </select>
+        </div>
+
+        <div class="filter-item">
+          <label for="leaveDeptFilter">Department:</label>
+          <select id="leaveDeptFilter" class="form-control" style="width: 140px;">
+            <option value="ALL">All Departments</option>
+            <option value="IT">IT</option>
+            <option value="HR">HR</option>
+            <option value="Finance">Finance</option>
+            <option value="Sales">Sales</option>
+            <option value="Operations">Operations</option>
+          </select>
+        </div>
+
+        <div class="filter-item" style="flex: 1; min-width: 180px;">
+          <input type="text" id="leaveSearchInput" class="form-control" placeholder="Search employee name, ID or reason...">
+        </div>
+
+        <button type="button" class="btn btn-secondary btn-sm" id="resetLeavesFilterBtn">Reset</button>
+      </div>
+
+      <!-- Leave Requests Table Card -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <span>📋 Employee Leave Applications Queue</span>
+            <span class="badge badge-blue" id="leavesTableBadge">0 Requests</span>
+          </h2>
+          <div class="card-actions">
+            <span style="font-size: 11px; color: var(--text-muted);">Approving auto-marks corresponding daily attendance records as 'Leave'</span>
+          </div>
+        </div>
+        <div class="card-body" style="padding: 0;">
+          <div class="table-responsive" style="border: none;">
+            <table class="table-custom" id="leavesTable">
+              <thead>
+                <tr>
+                  <th style="width: 75px;">Req ID</th>
+                  <th>Emp ID</th>
+                  <th>Employee Name</th>
+                  <th>Department</th>
+                  <th>Leave Type</th>
+                  <th>Duration (From – To)</th>
+                  <th style="text-align: center;">Days</th>
+                  <th>Employee Reason</th>
+                  <th>Status</th>
+                  <th>Supervisor Notes</th>
+                  <th style="text-align: center; width: 140px;">Decision</th>
+                </tr>
+              </thead>
+              <tbody id="leavesTableBody">
+                <!-- Populated dynamically by leaves.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
+          <span>Decisions update employee attendance percentage and risk factors in real-time</span>
+          <a href="attendance.html" style="font-weight: 600;">Go to Daily Attendance →</a>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Review Leave Modal (Approve / Reject) -->
+  <div class="modal-backdrop" id="reviewLeaveModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="reviewLeaveModalTitle">📝 Review Leave Application</h3>
+        <button type="button" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="reviewLeaveId">
+        <input type="hidden" id="reviewDecisionAction">
+
+        <div style="background-color: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <span style="font-weight: 700; color: var(--color-navy);" id="reviewEmpDetails">-</span>
+            <span class="badge badge-leave" id="reviewLeaveTypeBadge">-</span>
+          </div>
+          <div style="font-size: 12px; color: var(--text-muted);" id="reviewLeaveDates">-</div>
+          <div style="margin-top: 6px; font-size: 12px;"><strong>Reason:</strong> <span id="reviewLeaveReason">-</span></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reviewSupervisorRemark">Supervisor Remark / Justification <span class="required">*</span></label>
+          <textarea id="reviewSupervisorRemark" class="form-control" placeholder="Enter reason for approval or rejection (e.g. cover arranged, peak audit period)..." required rows="3"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary modal-close-btn">Cancel</button>
+        <button type="button" id="confirmLeaveDecisionBtn" class="btn btn-primary">Confirm Decision</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Apply New Leave Modal -->
+  <div class="modal-backdrop" id="newLeaveModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">➕ Submit Leave Request on Behalf</h3>
+        <button type="button" class="modal-close-btn">&times;</button>
+      </div>
+      <form id="newLeaveForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="newLeaveEmpSelect">Select Employee <span class="required">*</span></label>
+            <select id="newLeaveEmpSelect" class="form-control" required>
+              <!-- Populated by leaves.js -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="newLeaveTypeSelect">Leave Type <span class="required">*</span></label>
+            <select id="newLeaveTypeSelect" class="form-control" required>
+              <option value="Casual Leave">Casual Leave (CL)</option>
+              <option value="Sick Leave">Sick Leave (SL)</option>
+              <option value="Privilege Leave">Privilege Leave (PL)</option>
+              <option value="Emergency Leave">Emergency Leave (EL)</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="newLeaveStartDate">Start Date <span class="required">*</span></label>
+              <input type="date" id="newLeaveStartDate" class="form-control" required value="2026-09-22">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="newLeaveEndDate">End Date <span class="required">*</span></label>
+              <input type="date" id="newLeaveEndDate" class="form-control" required value="2026-09-23">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="newLeaveReasonInput">Reason for Leave <span class="required">*</span></label>
+            <textarea id="newLeaveReasonInput" class="form-control" placeholder="Enter reason provided by employee..." required rows="2"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary modal-close-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Submit Leave Application</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/leaves.js"></script>
+</body>
+</html>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supervisor Dashboard – AttendSync</title>
+  <meta name="description" content="AttendSync Supervisor Attendance Monitoring and Decision Support Dashboard.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div id="top-header-placeholder"></div>
+
+  <div class="app-container">
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-wrapper">
+      <!-- Breadcrumb & Page Title -->
+      <div class="breadcrumb">
+        <span>AttendSync</span>
+        <span class="breadcrumb-separator">/</span>
+        <span>Supervisor Portal</span>
+        <span class="breadcrumb-separator">/</span>
+        <strong>Executive Dashboard</strong>
+      </div>
+
+      <div class="page-header">
+        <div class="page-title-group">
+          <h1>📊 Supervisor Attendance Dashboard</h1>
+          <p class="page-subtitle">Real-time workforce attendance overview, risk alerts &amp; supervisor action center</p>
+        </div>
+        <div class="page-actions">
+          <span class="badge badge-present" id="currentDateBadge">📅 Monday, 21 Sep 2026</span>
+          <a href="attendance.html" class="btn btn-primary">✍️ Mark Today's Attendance</a>
+          <a href="reports.html" class="btn btn-secondary">📄 Export Report</a>
+        </div>
+      </div>
+
+      <!-- DSA / Technical Notice Banner -->
+      <div class="dsa-badge-banner">
+        <div>
+          <strong>⚡ Software &amp; Database Architecture:</strong> Underlying 50 employee records indexed with <strong>Hash Table &amp; Linear Probing</strong>. Dynamic metrics calculated via rule-based risk analysis engine.
+        </div>
+        <div>
+          <a href="settings.html" style="font-size: 11px; font-weight: 600; text-decoration: underline;">Inspect Hash Table →</a>
+        </div>
+      </div>
+
+      <!-- Top KPI Stat Tiles -->
+      <div class="stats-grid">
+        <div class="stat-tile tile-neutral">
+          <div class="stat-tile-label">Total Workforce</div>
+          <div class="stat-tile-value" id="kpiTotalEmployees">50</div>
+          <div class="stat-tile-meta">
+            <span>5 Active Departments</span>
+            <span>100% Roster</span>
+          </div>
+        </div>
+
+        <div class="stat-tile tile-present">
+          <div class="stat-tile-label">Present Today</div>
+          <div class="stat-tile-value" id="kpiPresentToday" style="color: var(--status-present);">41</div>
+          <div class="stat-tile-meta">
+            <span id="kpiPresentPct">82.0% Rate</span>
+            <span>Including WFH</span>
+          </div>
+        </div>
+
+        <div class="stat-tile tile-absent">
+          <div class="stat-tile-label">Absent Today</div>
+          <div class="stat-tile-value" id="kpiAbsentToday" style="color: var(--status-absent);">4</div>
+          <div class="stat-tile-meta">
+            <span>Unplanned Absences</span>
+            <span style="color: var(--status-absent); font-weight: 600;">Needs Followup</span>
+          </div>
+        </div>
+
+        <div class="stat-tile tile-late">
+          <div class="stat-tile-label">Late Arrivals</div>
+          <div class="stat-tile-value" id="kpiLateToday" style="color: var(--status-late);">3</div>
+          <div class="stat-tile-meta">
+            <span>Past 09:15 AM Grace</span>
+            <span>Recorded</span>
+          </div>
+        </div>
+
+        <div class="stat-tile tile-leave">
+          <div class="stat-tile-label">On Approved Leave</div>
+          <div class="stat-tile-value" id="kpiLeaveToday" style="color: var(--status-leave);">2</div>
+          <div class="stat-tile-meta">
+            <span>Casual / Sick Leaves</span>
+            <span>Verified</span>
+          </div>
+        </div>
+
+        <div class="stat-tile tile-risk">
+          <div class="stat-tile-label">High Risk Employees</div>
+          <div class="stat-tile-value" id="kpiHighRisk" style="color: var(--status-absent);">4</div>
+          <div class="stat-tile-meta">
+            <span>Low Att / Absences</span>
+            <a href="alerts.html" style="color: var(--status-absent); font-weight: bold; text-decoration: underline;">View Alerts</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Section: Grid 2-1 (Attention Table + Quick Summary) -->
+      <div class="grid-2-1">
+        
+        <!-- Left Column: Employees Requiring Attention -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">⚠️ Employees Requiring Supervisor Attention</h2>
+            <div class="card-actions">
+              <a href="monitoring.html" class="btn btn-secondary btn-sm">Open Smart Monitoring</a>
+            </div>
+          </div>
+          <div class="card-body" style="padding: 0;">
+            <div class="table-responsive" style="border: none;">
+              <table class="table-custom" id="attentionTable">
+                <thead>
+                  <tr>
+                    <th>Emp ID</th>
+                    <th>Employee Name</th>
+                    <th>Department</th>
+                    <th>Identified Attendance Issue</th>
+                    <th>Risk Level</th>
+                    <th style="text-align: center;">Supervisor Action</th>
+                  </tr>
+                </thead>
+                <tbody id="attentionTableBody">
+                  <!-- Populated dynamically by dashboard.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
+            <span>Rule-based anomaly detection: checks &lt; 75% attendance, 3+ consecutive absences &amp; missing punches</span>
+            <a href="alerts.html" style="font-weight: 600;">View All Risk Alerts →</a>
+          </div>
+        </div>
+
+        <!-- Right Column: Today's Attendance Status Breakdown & Pending Actions -->
+        <div>
+          <!-- Today's Attendance Breakdown Card -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">📋 Today's Attendance Breakdown</h2>
+              <span class="badge badge-present">21 Sep 2026</span>
+            </div>
+            <div class="card-body">
+              <div style="margin-bottom: 12px;">
+                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                  <span>Present (On-Time)</span>
+                  <strong id="breakdownPresentCount">38</strong>
+                </div>
+                <div class="progress-bar-container">
+                  <div class="progress-bar-fill fill-green" id="barPresent" style="width: 76%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-bottom: 12px;">
+                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                  <span>Late Arrivals</span>
+                  <strong id="breakdownLateCount">3</strong>
+                </div>
+                <div class="progress-bar-container">
+                  <div class="progress-bar-fill fill-yellow" id="barLate" style="width: 6%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-bottom: 12px;">
+                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                  <span>Unannounced Absences</span>
+                  <strong id="breakdownAbsentCount">4</strong>
+                </div>
+                <div class="progress-bar-container">
+                  <div class="progress-bar-fill fill-red" id="barAbsent" style="width: 8%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-bottom: 12px;">
+                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                  <span>Approved Leaves</span>
+                  <strong id="breakdownLeaveCount">2</strong>
+                </div>
+                <div class="progress-bar-container">
+                  <div class="progress-bar-fill" id="barLeave" style="width: 4%; background-color: var(--status-leave);"></div>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                <span>Work From Home (WFH)</span>
+                <strong id="breakdownWfhCount">3</strong>
+              </div>
+              <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="barWfh" style="width: 6%; background-color: var(--status-wfh);"></div>
+              </div>
+            </div>
+            <div class="card-footer" style="text-align: center;">
+              <a href="attendance.html" class="btn btn-primary btn-sm" style="width: 100%;">Verify &amp; Modify Today's Attendance</a>
+            </div>
+          </div>
+
+          <!-- Pending Supervisor Action Approvals -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">📝 Pending Queue</h2>
+            </div>
+            <div class="card-body" style="padding: 10px 14px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--color-border-light);">
+                <div>
+                  <div style="font-weight: 600;">Leave Approvals</div>
+                  <div style="font-size: 11px; color: var(--text-muted);">Awaiting supervisor decision</div>
+                </div>
+                <div>
+                  <a href="leaves.html" class="btn btn-warning btn-sm" id="queuePendingLeaves">3 Pending</a>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--color-border-light);">
+                <div>
+                  <div style="font-weight: 600;">Regularization Requests</div>
+                  <div style="font-size: 11px; color: var(--text-muted);">Missed biometric punch corrections</div>
+                </div>
+                <div>
+                  <a href="regularization.html" class="btn btn-primary btn-sm" id="queuePendingRegs">3 Pending</a>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0;">
+                <div>
+                  <div style="font-weight: 600;">Shift Understaffing</div>
+                  <div style="font-size: 11px; color: var(--text-muted);">Night shift below minimum head count</div>
+                </div>
+                <div>
+                  <a href="shifts.html" class="btn btn-danger btn-sm">Review Shift</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Secondary Section: Grid 2 (30-day Trend Chart + Department Overview + Recent Actions) -->
+      <div class="grid-2">
+        <!-- 30-Day Attendance Trend (Traditional Canvas Chart) -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">📈 30-Day Attendance Rate Trend</h2>
+            <div class="card-actions">
+              <span style="font-size: 11px; color: var(--text-muted);">Avg: 88.4%</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div style="height: 180px; width: 100%; position: relative;">
+              <canvas id="trendChartCanvas" width="540" height="180" style="width: 100%; height: 100%;"></canvas>
+            </div>
+          </div>
+          <div class="card-footer" style="display: flex; justify-content: space-between; font-size: 11px;">
+            <span>🟢 Baseline Target: 85.0%</span>
+            <span>🔴 Critical Threshold: 75.0%</span>
+          </div>
+        </div>
+
+        <!-- Department-Wise Attendance Progress -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">🏢 Department Attendance Comparison</h2>
+            <a href="departments.html" class="btn btn-secondary btn-sm">View Details</a>
+          </div>
+          <div class="card-body" id="departmentStatsContainer">
+            <!-- Populated dynamically by dashboard.js -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Supervisor Actions Card -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">📋 Recent Supervisor Decision Log</h2>
+          <div class="card-actions">
+            <a href="audit.html" class="btn btn-secondary btn-sm">Full Audit Trail</a>
+          </div>
+        </div>
+        <div class="card-body" style="padding: 0;">
+          <div class="table-responsive" style="border: none;">
+            <table class="table-custom">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Supervisor</th>
+                  <th>Employee</th>
+                  <th>Triggering Issue</th>
+                  <th>Action Taken</th>
+                  <th>Supervisor Remark</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="recentActionsTableBody">
+                <!-- Populated dynamically by dashboard.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Supervisor Quick Action Modal -->
+  <div class="modal-backdrop" id="quickActionModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="actionModalTitle">⚡ Take Supervisor Action</h3>
+        <button type="button" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="alert-box alert-warning" id="actionModalProblemAlert">
+          <!-- Problem context -->
+        </div>
+
+        <input type="hidden" id="actionEmployeeId">
+        <input type="hidden" id="actionEmployeeName">
+
+        <div class="form-group">
+          <label class="form-label">Employee Details</label>
+          <div style="font-weight: 600; padding: 6px 8px; background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: var(--radius-sm);" id="actionEmployeeInfo">
+            Rahul Kumar (EMP101) - IT Department
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="actionSelect">Supervisor Decision / Action <span class="required">*</span></label>
+          <select id="actionSelect" class="form-control" required>
+            <option value="Formal Warning Recorded">Record Formal Written Warning</option>
+            <option value="Supervisor Follow-up">Schedule 1-on-1 Counseling / Follow-up</option>
+            <option value="Escalated to HR">Escalate Issue to HR Department</option>
+            <option value="Contacted Employee">Contact Employee via Phone / Email</option>
+            <option value="Marked as Resolved">Mark Anomaly as Reviewed &amp; Resolved</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="actionRemark">Supervisor Remark &amp; Evidence Notes <span class="required">*</span></label>
+          <textarea id="actionRemark" class="form-control" placeholder="Enter detailed supervisor justification, conversation summary or action notes..." required rows="3"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary modal-close-btn">Cancel</button>
+        <button type="button" id="saveActionSubmitBtn" class="btn btn-primary">Save &amp; Log Action</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

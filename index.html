@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AttendSync – Employee Attendance Monitoring System for Supervisors</title>
+  <meta name="description" content="AttendSync is a centralized workforce attendance monitoring and supervisor decision support platform. Monitor attendance, detect risk patterns, handle leave and regularization, and maintain supervisor audit trails.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="landing-page-body">
+
+  <!-- 1. Institutional Top Utility Bar (Inspired by Government/Enterprise Portals) -->
+  <div class="institutional-bar">
+    <div class="landing-container institutional-content">
+      <div class="institutional-left">
+        <span class="inst-dept-badge">DEPARTMENT OF SOFTWARE DEVELOPMENT &amp; DATABASE MANAGEMENT</span>
+        <span class="inst-divider">|</span>
+        <span class="inst-subtitle">ACADEMIC &amp; ENTERPRISE SYSTEM PROTOTYPE</span>
+      </div>
+      <div class="institutional-right">
+        <a href="#main-content" class="inst-link">Skip to Main Content</a>
+        <span class="inst-divider">|</span>
+        <div class="font-sizer" title="Accessibility Font Resizer">
+          <span style="font-size: 11px; margin-right: 4px; color: #93c5fd;">Text:</span>
+          <button type="button" class="btn-font-size" id="fontDec" title="Decrease font size">A-</button>
+          <button type="button" class="btn-font-size" id="fontReset" title="Reset font size">A</button>
+          <button type="button" class="btn-font-size" id="fontInc" title="Increase font size">A+</button>
+        </div>
+        <span class="inst-divider">|</span>
+        <a href="login.html" class="inst-link inst-portal-link">🔑 Supervisor Portal</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Main Public Navigation Header -->
+  <header class="landing-nav-header">
+    <div class="landing-container landing-nav-wrapper">
+      <a href="index.html" class="landing-brand" title="AttendSync – Home">
+        <img src="assets/logo.png" alt="AttendSync Logo" class="landing-brand-logo">
+        <div class="landing-brand-text">
+          <div class="landing-brand-title">AttendSync</div>
+          <div class="landing-brand-subtitle">Employee Attendance Monitoring System for Supervisors</div>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <nav class="landing-nav-menu" aria-label="Public Navigation">
+        <a href="#home" class="landing-nav-link active">Home</a>
+        <a href="#about" class="landing-nav-link">About</a>
+        <a href="#features" class="landing-nav-link">Features</a>
+        <a href="#how-it-works" class="landing-nav-link">How It Works</a>
+        <a href="#contact" class="landing-nav-link">Contact</a>
+      </nav>
+
+      <!-- Portal CTA Button -->
+      <div class="landing-nav-actions">
+        <a href="login.html" class="btn btn-primary landing-portal-btn" id="navSupervisorBtn">
+          <span>Supervisor Portal</span>
+          <span class="btn-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Wrapper -->
+  <main id="main-content">
+
+    <!-- 3. Hero Section -->
+    <section class="landing-hero-section" id="home">
+      <div class="landing-container">
+        <div class="hero-inner">
+          <div class="hero-eyebrow">
+            <span class="badge-institutional">CENTRALIZED WORKFORCE OVERSIGHT PLATFORM</span>
+          </div>
+          <h1 class="hero-headline">Smarter Attendance. Better Workforce Decisions.</h1>
+          <p class="hero-subheadline">
+            AttendSync helps supervisors monitor attendance, identify risks, manage exceptions, and take informed actions from a single platform.
+          </p>
+
+          <div class="hero-cta-group">
+            <a href="login.html" class="btn btn-primary btn-hero" id="heroPortalBtn">
+              <span>Supervisor Portal</span>
+              <span class="btn-arrow">→</span>
+            </a>
+            <a href="#features" class="btn btn-outline btn-hero" id="heroFeaturesBtn">
+              <span>Explore Features</span>
+              <span class="btn-arrow">↓</span>
+            </a>
+          </div>
+
+          <!-- Hero Highlight Metrics Cards -->
+          <div class="hero-stats-banner">
+            <div class="hero-stat-card">
+              <div class="hero-stat-num">50</div>
+              <div class="hero-stat-label">Active Monitored Staff</div>
+            </div>
+            <div class="hero-stat-card">
+              <div class="hero-stat-num">30-Day</div>
+              <div class="hero-stat-label">Dynamic Punch Analysis</div>
+            </div>
+            <div class="hero-stat-card">
+              <div class="hero-stat-num">Rule-Based</div>
+              <div class="hero-stat-label">Risk Tier Categorization</div>
+            </div>
+            <div class="hero-stat-card">
+              <div class="hero-stat-num">100%</div>
+              <div class="hero-stat-label">Supervisor Audit Trail</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. About Section -->
+    <section class="landing-section bg-surface" id="about">
+      <div class="landing-container">
+        <div class="section-header-block">
+          <div class="section-title-line">
+            <span class="section-pre-title">SYSTEM OVERVIEW</span>
+          </div>
+          <h2 class="section-title">Smart Attendance Monitoring for Supervisors</h2>
+          <div class="section-divider"></div>
+          <p class="section-lead">
+            Monitor employee attendance, identify workforce issues, and take timely action from one centralized platform.
+          </p>
+        </div>
+
+        <div class="about-grid">
+          <div class="about-card">
+            <div class="about-icon">🎯</div>
+            <h3>Beyond Simple Time Tracking</h3>
+            <p>Traditional attendance tools merely register timestamps. AttendSync is an active supervisor decision-support system that transforms raw clock-in data into actionable operational insights.</p>
+          </div>
+          <div class="about-card">
+            <div class="about-icon">🔍</div>
+            <h3>Early Risk Detection</h3>
+            <p>Weighted algorithms analyze chronic tardiness, consecutive absences, and missing punches to score attendance reliability and pinpoint staff requiring immediate supervisor attention.</p>
+          </div>
+          <div class="about-card">
+            <div class="about-icon">⚡</div>
+            <h3>Direct Operational Workflow</h3>
+            <p>Seamlessly process leave applications, evaluate punch regularization requests, document supervisor warnings, and record follow-ups with comprehensive database auditing.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Features Section: "Everything a Supervisor Needs" -->
+    <section class="landing-section bg-subtle" id="features">
+      <div class="landing-container">
+        <div class="section-header-block">
+          <div class="section-title-line">
+            <span class="section-pre-title">MODULE CAPABILITIES</span>
+          </div>
+          <h2 class="section-title">Everything a Supervisor Needs</h2>
+          <div class="section-divider"></div>
+          <p class="section-lead">
+            A comprehensive, rule-based workforce monitoring suite designed specifically for frontline supervisors and department managers.
+          </p>
+        </div>
+
+        <div class="features-grid">
+          <!-- 1. Attendance Monitoring -->
+          <div class="feature-card">
+            <div class="feature-card-header">
+              <div class="feature-icon-badge">📅</div>
+              <h3 class="feature-title">Attendance Monitoring</h3>
+            </div>
+            <p class="feature-desc">Monitor daily employee attendance.</p>
+            <ul class="feature-sublist">
+              <li>Real-time punch logging and shift verification</li>
+              <li>Present, Late, Half-Day &amp; Absent tracking</li>
+              <li>Filter by date and department rosters</li>
+            </ul>
+          </div>
+
+          <!-- 2. Smart Monitoring -->
+          <div class="feature-card">
+            <div class="feature-card-header">
+              <div class="feature-icon-badge">🧠</div>
+              <h3 class="feature-title">Smart Monitoring</h3>
+            </div>
+            <p class="feature-desc">Identify low attendance, consecutive absences and unusual patterns.</p>
+            <ul class="feature-sublist">
+              <li>Automatic detection of &lt;75% attendance threshold</li>
+              <li>Flag consecutive 3+ day unexplained absences</li>
+              <li>Frequent tardiness pattern recognition</li>
+            </ul>
+          </div>
+
+          <!-- 3. Risk Analysis -->
+          <div class="feature-card">
+            <div class="feature-card-header">
+              <div class="feature-icon-badge">⚠️</div>
+              <h3 class="feature-title">Risk Analysis</h3>
+            </div>
+            <p class="feature-desc">Identify employees requiring supervisor attention.</p>
+            <ul class="feature-sublist">
+              <li>Weighted scoring formula (Attendance, Lates, Gaps)</li>
+              <li>Categorized into High, Medium, and Low risk tiers</li>
+              <li>Detailed problem breakdown per employee</li>
+            </ul>
+          </div>
+
+          <!-- 4. Leave Management -->
+          <div class="feature-card">
+            <div class="feature-card-header">
+              <div class="feature-icon-badge">📝</div>
+              <h3 class="feature-title">Leave Management</h3>
+            </div>
+            <p class="feature-desc">Review and manage employee leave requests.</p>
+            <ul class="feature-sublist">
+              <li>Approve or reject pending leave requests</li>
+              <li>Supervisor remarks and rationale documentation</li>
+              <li>Automated workforce availability calendar</li>
+            </ul>
+          </div>
+
+          <!-- 5. Regularization -->
+          <div class="feature-card">
+            <div class="feature-card-header">
+              <div class="feature-icon-badge">⏱️</div>
+              <h3 class="feature-title">Regularization</h3>
+            </div>
+            <p class="feature-desc">Handle missed-punch and attendance correction requests.</p>
+            <ul class="feature-sublist">
+              <li>Evaluate missed-punch justification requests</li>
+              <li>Approve corrected check-in/out timestamps</li>
+              <li>Prevents unverified punch modifications</li>
+            </ul>
+          </div>
+
+          <!-- 6. Reports & Analytics -->
+          <div class="feature-card">
+            <div class="feature-card-header">
+              <div class="feature-icon-badge">📊</div>
+              <h3 class="feature-title">Reports &amp; Analytics</h3>
+            </div>
+            <p class="feature-desc">Generate attendance and workforce reports.</p>
+            <ul class="feature-sublist">
+              <li>Department-wise monthly summaries &amp; metrics</li>
+              <li>One-click CSV data export for external reporting</li>
+              <li>Print-ready executive attendance summaries</li>
+            </ul>
+          </div>
+
+          <!-- 7. Supervisor Actions -->
+          <div class="feature-card">
+            <div class="feature-card-header">
+              <div class="feature-icon-badge">🛡️</div>
+              <h3 class="feature-title">Supervisor Actions</h3>
+            </div>
+            <p class="feature-desc">Record warnings, follow-ups and resolutions.</p>
+            <ul class="feature-sublist">
+              <li>Issue formal verbal and written attendance warnings</li>
+              <li>Schedule 1-on-1 employee counseling meetings</li>
+              <li>Assign HR follow-up tasks and track resolution</li>
+            </ul>
+          </div>
+
+          <!-- 8. Audit Trail -->
+          <div class="feature-card">
+            <div class="feature-card-header">
+              <div class="feature-icon-badge">📜</div>
+              <h3 class="feature-title">Audit Trail</h3>
+            </div>
+            <p class="feature-desc">Maintain a record of important supervisor actions.</p>
+            <ul class="feature-sublist">
+              <li>Tamper-evident chronological event logging</li>
+              <li>Timestamp, supervisor ID, action type, and remarks</li>
+              <li>Searchable compliance and accountability log</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. How It Works Section: 4-Step Workflow -->
+    <section class="landing-section bg-surface" id="how-it-works">
+      <div class="landing-container">
+        <div class="section-header-block">
+          <div class="section-title-line">
+            <span class="section-pre-title">OPERATIONAL WORKFLOW</span>
+          </div>
+          <h2 class="section-title">How AttendSync Works</h2>
+          <div class="section-divider"></div>
+          <p class="section-lead">
+            A continuous four-stage lifecycle providing closed-loop attendance oversight and accountability.
+          </p>
+        </div>
+
+        <div class="workflow-grid">
+          <!-- Step 1 -->
+          <div class="workflow-card">
+            <div class="workflow-step-num">1</div>
+            <div class="workflow-card-body">
+              <h3 class="workflow-step-title">Monitor</h3>
+              <p class="workflow-step-desc">Track employee attendance.</p>
+              <div class="workflow-step-detail">Shift punches, daily roster verification, and biometric timestamp logging.</div>
+            </div>
+          </div>
+
+          <div class="workflow-arrow-item">↓</div>
+
+          <!-- Step 2 -->
+          <div class="workflow-card">
+            <div class="workflow-step-num">2</div>
+            <div class="workflow-card-body">
+              <h3 class="workflow-step-title">Analyze</h3>
+              <p class="workflow-step-desc">Identify attendance issues and risks.</p>
+              <div class="workflow-step-detail">Automated rule evaluation flags attendance below 75%, consecutive absences, and high risk scores.</div>
+            </div>
+          </div>
+
+          <div class="workflow-arrow-item">↓</div>
+
+          <!-- Step 3 -->
+          <div class="workflow-card">
+            <div class="workflow-step-num">3</div>
+            <div class="workflow-card-body">
+              <h3 class="workflow-step-title">Act</h3>
+              <p class="workflow-step-desc">Take supervisor action.</p>
+              <div class="workflow-step-detail">Directly approve leaves, review regularization requests, issue formal warnings, or schedule counseling.</div>
+            </div>
+          </div>
+
+          <div class="workflow-arrow-item">↓</div>
+
+          <!-- Step 4 -->
+          <div class="workflow-card">
+            <div class="workflow-step-num">4</div>
+            <div class="workflow-card-body">
+              <h3 class="workflow-step-title">Record</h3>
+              <p class="workflow-step-desc">Maintain an audit trail.</p>
+              <div class="workflow-step-detail">Every decision, timestamp, supervisor note, and status transition is saved to the permanent audit log.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Prominent Supervisor Portal Call to Action -->
+    <section class="landing-cta-banner">
+      <div class="landing-container">
+        <div class="cta-banner-content">
+          <h2 class="cta-banner-heading">Ready to manage attendance smarter?</h2>
+          <p class="cta-banner-subtext">
+            Log in to the Supervisor Portal to monitor workforce status, review attendance alerts, and take immediate supervisor action.
+          </p>
+          <div class="cta-banner-actions">
+            <a href="login.html" class="btn btn-primary btn-cta-large" id="bottomCtaPortalBtn">
+              <span>Open Supervisor Portal</span>
+              <span class="btn-arrow">→</span>
+            </a>
+          </div>
+          <div class="cta-demo-hint">
+            <span>🔑 Demo Access Available:</span> <code>admin</code> / <code>admin123</code>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. Technical & Academic Architecture Section -->
+    <section class="landing-section bg-subtle" id="contact">
+      <div class="landing-container">
+        <div class="section-header-block">
+          <div class="section-title-line">
+            <span class="section-pre-title">ACADEMIC &amp; TECHNICAL ARCHITECTURE</span>
+          </div>
+          <h2 class="section-title">Software Development / Database Management</h2>
+          <div class="section-divider"></div>
+          <p class="section-lead">
+            AttendSync is built as a complete frontend prototype incorporating core computer science principles, data structures, and rule-based decision support logic.
+          </p>
+        </div>
+
+        <div class="tech-specs-grid">
+          <div class="tech-spec-card">
+            <h4>Data Structures &amp; Algorithms</h4>
+            <p>Features an interactive <strong>Hash Table with Linear Probing</strong> collision resolution for O(1) average lookup of employee records and live viva demonstration.</p>
+          </div>
+          <div class="tech-spec-card">
+            <h4>Database &amp; Persistence</h4>
+            <p>Structured schema with 50 realistic employee records, ~1,500 30-day historical punch records, and robust <strong>localStorage</strong> state management with factory reset.</p>
+          </div>
+          <div class="tech-spec-card">
+            <h4>Supervisor Decision Support</h4>
+            <p>Algorithmic risk engine dynamically computing composite scores (0–100) based on attendance percentages, tardiness frequencies, and consecutive absences.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 9. Professional Enterprise Footer -->
+  <footer class="landing-footer">
+    <div class="landing-container footer-content">
+      <div class="footer-top">
+        <div class="footer-brand-col">
+          <div class="footer-logo-row">
+            <img src="assets/logo.png" alt="AttendSync Logo" class="footer-brand-logo">
+            <span class="footer-brand-title">AttendSync</span>
+          </div>
+          <p class="footer-brand-desc">
+            Employee Attendance Monitoring &amp; Decision Support System for Supervisors.
+          </p>
+          <div class="footer-dept-tag">Department: Software Development / Database Management</div>
+        </div>
+
+        <div class="footer-links-col">
+          <h4 class="footer-heading">Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About Platform</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#contact">Technical Specs</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links-col">
+          <h4 class="footer-heading">Supervisor Portal</h4>
+          <ul class="footer-links">
+            <li><a href="login.html">Supervisor Sign In</a></li>
+            <li><a href="login.html">Demo Credentials</a></li>
+            <li><a href="login.html">Access Dashboard</a></li>
+            <li><a href="login.html">Audit Trail</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links-col">
+          <h4 class="footer-heading">Project Prototype</h4>
+          <ul class="footer-links">
+            <li><span style="color: #cbd5e1;">Version: 1.2.0 (Prototype)</span></li>
+            <li><span style="color: #cbd5e1;">Environment: Local Web / Node</span></li>
+            <li><span style="color: #cbd5e1;">Theme: Enterprise Three-Tone</span></li>
+            <li><span style="color: #93c5fd;">Status: Operational</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="footer-copy">
+          &copy; 2026 AttendSync – Academic &amp; Enterprise Project. All rights reserved.
+        </div>
+        <div class="footer-security">
+          <span>Confidentiality &amp; Supervisor Access Controlled</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Accessibility Font Resizer & Smooth Scroll Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Font resizer
+      let currentZoom = 100;
+      const fontDec = document.getElementById('fontDec');
+      const fontReset = document.getElementById('fontReset');
+      const fontInc = document.getElementById('fontInc');
+
+      if (fontDec && fontReset && fontInc) {
+        fontDec.addEventListener('click', () => {
+          if (currentZoom > 85) {
+            currentZoom -= 5;
+            document.documentElement.style.fontSize = currentZoom + '%';
+          }
+        });
+        fontReset.addEventListener('click', () => {
+          currentZoom = 100;
+          document.documentElement.style.fontSize = '100%';
+        });
+        fontInc.addEventListener('click', () => {
+          if (currentZoom < 125) {
+            currentZoom += 5;
+            document.documentElement.style.fontSize = currentZoom + '%';
+          }
+        });
+      }
+
+      // Smooth scrolling for navigation links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          const targetId = this.getAttribute('href');
+          if (targetId === '#') return;
+          const targetElem = document.querySelector(targetId);
+          if (targetElem) {
+            e.preventDefault();
+            targetElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Update active link
+            document.querySelectorAll('.landing-nav-link').forEach(link => link.classList.remove('active'));
+            if (this.classList.contains('landing-nav-link')) {
+              this.classList.add('active');
+            }
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

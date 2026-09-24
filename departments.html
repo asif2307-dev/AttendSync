@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Department Management &amp; Analytics – AttendSync</title>
+  <meta name="description" content="Department-wise workforce analytics, attendance rates, supervisor oversight and staff rosters.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div id="top-header-placeholder"></div>
+
+  <div class="app-container">
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-wrapper">
+      <div class="breadcrumb">
+        <span>AttendSync</span>
+        <span class="breadcrumb-separator">/</span>
+        <span>Supervisor Portal</span>
+        <span class="breadcrumb-separator">/</span>
+        <strong>Department Analytics</strong>
+      </div>
+
+      <div class="page-header">
+        <div class="page-title-group">
+          <h1>🏢 Department Overview &amp; Workforce Attendance</h1>
+          <p class="page-subtitle">Comparative attendance benchmarks, department roster tracking, and headcounts</p>
+        </div>
+        <div class="page-actions">
+          <a href="reports.html" class="btn btn-secondary">📄 Department Report</a>
+        </div>
+      </div>
+
+      <!-- Department Cards Grid -->
+      <div class="grid-3" id="departmentCardsGrid">
+        <!-- Injected by departments.js -->
+      </div>
+
+      <!-- Department Employee Roster Table -->
+      <div class="card" style="margin-top: 16px;">
+        <div class="card-header">
+          <h2 class="card-title">
+            <span id="selectedDeptTitle">📋 IT Department Personnel Roster</span>
+            <span class="badge badge-blue" id="deptEmpCountBadge">14 Employees</span>
+          </h2>
+          <div class="card-actions">
+            <select id="switchDeptSelect" class="form-control" style="width: 150px;">
+              <option value="IT">IT Department</option>
+              <option value="HR">HR Department</option>
+              <option value="Finance">Finance Department</option>
+              <option value="Sales">Sales Department</option>
+              <option value="Operations">Operations Department</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-body" style="padding: 0;">
+          <div class="table-responsive" style="border: none;">
+            <table class="table-custom" id="deptRosterTable">
+              <thead>
+                <tr>
+                  <th>Emp ID</th>
+                  <th>Employee Name</th>
+                  <th>Designation</th>
+                  <th>Shift</th>
+                  <th>Email</th>
+                  <th>Contact</th>
+                  <th style="text-align: center;">Attendance %</th>
+                  <th style="text-align: center;">Risk Level</th>
+                  <th style="text-align: center; width: 120px;">Profile</th>
+                </tr>
+              </thead>
+              <tbody id="deptRosterTableBody">
+                <!-- Injected by departments.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/departments.js"></script>
+</body>
+</html>

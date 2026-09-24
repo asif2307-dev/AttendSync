@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mark Daily Attendance – AttendSync</title>
+  <meta name="description" content="Record daily attendance, bulk mark present, modify punches, and update records with supervisor verification.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div id="top-header-placeholder"></div>
+
+  <div class="app-container">
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-wrapper">
+      <div class="breadcrumb">
+        <span>AttendSync</span>
+        <span class="breadcrumb-separator">/</span>
+        <span>Supervisor Portal</span>
+        <span class="breadcrumb-separator">/</span>
+        <strong>Mark Attendance</strong>
+      </div>
+
+      <div class="page-header">
+        <div class="page-title-group">
+          <h1>✍️ Daily Attendance Marking &amp; Verification</h1>
+          <p class="page-subtitle">Verify shift punch-ins, modify status flags, and commit official attendance logs</p>
+        </div>
+        <div class="page-actions">
+          <button type="button" class="btn btn-secondary" id="markAllPresentBtn">✅ Mark All Present</button>
+          <button type="button" class="btn btn-primary" id="saveAttendanceBtn">💾 Save Attendance Records</button>
+        </div>
+      </div>
+
+      <!-- Attendance Filter & Date Bar -->
+      <div class="filter-bar">
+        <div class="filter-item">
+          <label for="attendanceDatePicker">Attendance Date:</label>
+          <input type="date" id="attendanceDatePicker" class="form-control" value="2026-09-21" style="width: 140px; font-weight: 600;">
+        </div>
+
+        <div class="filter-item">
+          <label for="attDeptFilter">Department:</label>
+          <select id="attDeptFilter" class="form-control" style="width: 140px;">
+            <option value="ALL">All Departments</option>
+            <option value="IT">IT</option>
+            <option value="HR">HR</option>
+            <option value="Finance">Finance</option>
+            <option value="Sales">Sales</option>
+            <option value="Operations">Operations</option>
+          </select>
+        </div>
+
+        <div class="filter-item">
+          <label for="attShiftFilter">Shift:</label>
+          <select id="attShiftFilter" class="form-control" style="width: 130px;">
+            <option value="ALL">All Shifts</option>
+            <option value="Morning">Morning</option>
+            <option value="Evening">Evening</option>
+            <option value="Night">Night</option>
+          </select>
+        </div>
+
+        <div class="filter-item" style="flex: 1; min-width: 180px;">
+          <input type="text" id="attSearchInput" class="form-control" placeholder="Search employee name or ID...">
+        </div>
+
+        <button type="button" class="btn btn-secondary btn-sm" id="reloadDateBtn">Reload Date Data</button>
+      </div>
+
+      <!-- Quick Summary Counters for selected date -->
+      <div style="display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap;">
+        <div class="badge badge-present" style="padding: 6px 10px; font-size: 12px;" id="countPresentBadge">Present: 0</div>
+        <div class="badge badge-late" style="padding: 6px 10px; font-size: 12px;" id="countLateBadge">Late: 0</div>
+        <div class="badge badge-absent" style="padding: 6px 10px; font-size: 12px;" id="countAbsentBadge">Absent: 0</div>
+        <div class="badge badge-leave" style="padding: 6px 10px; font-size: 12px;" id="countLeaveBadge">Leave: 0</div>
+        <div class="badge badge-wfh" style="padding: 6px 10px; font-size: 12px;" id="countWfhBadge">WFH: 0</div>
+      </div>
+
+      <!-- Attendance Marking Table Card -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <span>📋 Employee Attendance Sheet</span>
+            <span class="badge badge-blue" id="tableRosterCount">50 Employees</span>
+          </h2>
+          <div class="card-actions">
+            <span style="font-size: 11px; color: var(--text-muted);">Changes will persist immediately upon clicking Save</span>
+          </div>
+        </div>
+        <div class="card-body" style="padding: 0;">
+          <div class="table-responsive" style="border: none;">
+            <table class="table-custom" id="attendanceGridTable">
+              <thead>
+                <tr>
+                  <th style="width: 80px;">Emp ID</th>
+                  <th>Employee Name</th>
+                  <th>Department</th>
+                  <th>Shift</th>
+                  <th style="width: 170px;">Attendance Status</th>
+                  <th style="width: 110px;">Check-In</th>
+                  <th style="width: 110px;">Check-Out</th>
+                  <th>Supervisor Remarks / Reason</th>
+                </tr>
+              </thead>
+              <tbody id="attendanceGridBody">
+                <!-- Populated dynamically by attendance.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
+          <span>Ensure all absent and late entries are accompanied by remarks for accurate risk calculation</span>
+          <button type="button" class="btn btn-primary" id="saveAttendanceFooterBtn">💾 Save Attendance Records</button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/attendance.js"></script>
+</body>
+</html>

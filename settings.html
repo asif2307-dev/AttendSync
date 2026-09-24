@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings &amp; Technical Overview – AttendSync</title>
+  <meta name="description" content="System configuration parameters, risk thresholds, DSA hash table linear probing simulator, and demo data reset.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div id="top-header-placeholder"></div>
+
+  <div class="app-container">
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-wrapper">
+      <div class="breadcrumb">
+        <span>AttendSync</span>
+        <span class="breadcrumb-separator">/</span>
+        <span>Supervisor Portal</span>
+        <span class="breadcrumb-separator">/</span>
+        <strong>System Settings &amp; DSA Architecture</strong>
+      </div>
+
+      <div class="page-header">
+        <div class="page-title-group">
+          <h1>⚙️ System Settings &amp; Technical / DSA Architecture</h1>
+          <p class="page-subtitle">Configure operational thresholds, explore Hash Table Linear Probing simulator &amp; manage data persistence</p>
+        </div>
+        <div class="page-actions">
+          <button type="button" class="btn btn-danger" id="resetDemoDataTopBtn">⚠️ Reset Demo Data</button>
+        </div>
+      </div>
+
+      <!-- DSA / Technical Viva Demonstration Card -->
+      <div class="card" style="border-top: 3px solid var(--color-blue-primary);">
+        <div class="card-header" style="background-color: #eff6ff;">
+          <h2 class="card-title" style="color: var(--color-navy);">
+            <span>⚡ Software Development &amp; DSA Architecture Overview (Project / Viva Demonstration)</span>
+          </h2>
+          <span class="badge badge-blue">Academic Prototype</span>
+        </div>
+        <div class="card-body">
+          <div class="grid-2">
+            <div>
+              <h3 style="font-size: 13px; color: var(--color-navy); margin-bottom: 6px;">1. Core Data Structures Implemented:</h3>
+              <ul style="font-size: 12px; line-height: 1.6; padding-left: 20px; color: var(--text-main);">
+                <li><strong>Structures (Structs / Objects):</strong> Encapsulates Employee record schema (ID, Name, Department, Shift, Joining Date, Contact).</li>
+                <li><strong>Arrays:</strong> Linear contiguous memory stores for 50 employee records and ~1,500 daily attendance history punch matrices.</li>
+                <li><strong>Hash Table (Linear Probing):</strong> Fixed capacity (size = 97 prime table). Implements custom polynomial ASCII hash function and linear collision resolution for $O(1)$ fast employee lookups by ID.</li>
+              </ul>
+            </div>
+            <div>
+              <h3 style="font-size: 13px; color: var(--color-navy); margin-bottom: 6px;">2. Algorithms &amp; Operations:</h3>
+              <ul style="font-size: 12px; line-height: 1.6; padding-left: 20px; color: var(--text-main);">
+                <li><strong>Hash-Based Searching:</strong> $O(1)$ average time complexity with step-by-step probe tracking.</li>
+                <li><strong>Sorting:</strong> QuickSort / TimSort multi-column comparator (ID, Name, Dept, Attendance %, Risk Score).</li>
+                <li><strong>Rule-Based Risk Calculation:</strong>
+                  $$\text{Risk} = (100 - \text{Att \%}) \times 0.45 + (\text{Late} \times 4) + (\text{Consec Abs} \times 12) + (\text{Missed} \times 8)$$
+                </li>
+                <li><strong>Data Persistence:</strong> Full CRUD with localStorage database simulation.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Interactive Hash Table Live Probe Simulator -->
+          <div class="dsa-visualizer-container" style="margin-top: 14px;">
+            <div style="font-weight: 700; color: var(--color-navy); margin-bottom: 6px;">
+              🔍 Interactive Hash Table Search Simulator (Linear Probing Visualizer)
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 10px; flex-wrap: wrap;">
+              <input type="text" id="simEmpIdInput" class="form-control" placeholder="Enter Employee ID (e.g. EMP101, EMP106, EMP150)..." value="EMP106" style="width: 260px;">
+              <button type="button" class="btn btn-primary btn-sm" id="runHashSimBtn">⚡ Simulate Hash Search</button>
+              <button type="button" class="btn btn-secondary btn-sm" id="testCollisionBtn">Test Linear Collision Demo</button>
+            </div>
+
+            <div id="hashSimOutputBox" class="alert-box alert-info" style="margin-bottom: 10px; font-size: 12px;">
+              Enter an Employee ID above and click Simulate to trace the Hash Function and Linear Probing path.
+            </div>
+
+            <div style="font-weight: 600; font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">
+              Hash Table Slot Grid (Sample 32 Buckets of Capacity 97):
+            </div>
+            <div class="hash-grid" id="hashGridVisualizer">
+              <!-- Populated dynamically by settings.js -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- System Configuration Settings Form Card -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">⚙️ Operational Monitoring Thresholds &amp; Preferences</h2>
+        </div>
+        <form id="settingsForm">
+          <div class="card-body">
+            <div class="grid-2">
+              <div>
+                <div class="form-group">
+                  <label class="form-label" for="settingLowAtt">Low Attendance Critical Threshold (%) <span class="required">*</span></label>
+                  <input type="number" id="settingLowAtt" class="form-control" min="50" max="95" required value="75">
+                  <span style="font-size: 10.5px; color: var(--text-muted);">Employees below this attendance percentage trigger High Risk alerts</span>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="settingConsecLimit">Consecutive Absence Trigger Limit (Days) <span class="required">*</span></label>
+                  <input type="number" id="settingConsecLimit" class="form-control" min="1" max="10" required value="3">
+                  <span style="font-size: 10.5px; color: var(--text-muted);">Consecutive unapproved absences triggering immediate supervisor outreach</span>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="settingLateLimit">Late Arrival Counseling Threshold (Days in 30d) <span class="required">*</span></label>
+                  <input type="number" id="settingLateLimit" class="form-control" min="1" max="15" required value="4">
+                  <span style="font-size: 10.5px; color: var(--text-muted);">Number of late arrivals before punctuality warning is recommended</span>
+                </div>
+              </div>
+
+              <div>
+                <div class="form-group">
+                  <label class="form-label" for="settingHours">Standard Daily Working Hours <span class="required">*</span></label>
+                  <input type="number" id="settingHours" class="form-control" min="6" max="12" required value="9">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="settingGrace">Late Arrival Grace Period (Minutes) <span class="required">*</span></label>
+                  <input type="number" id="settingGrace" class="form-control" min="0" max="60" required value="15">
+                  <span style="font-size: 10.5px; color: var(--text-muted);">Grace window permitted after official shift start time</span>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="settingSupervisor">Supervisor Officer Name <span class="required">*</span></label>
+                  <input type="text" id="settingSupervisor" class="form-control" required value="Mo Asif">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
+            <button type="button" class="btn btn-danger btn-sm" id="resetDemoDataBtn">⚠️ Reset All Demo Data to Factory State</button>
+            <button type="submit" class="btn btn-primary">Save Settings Configuration</button>
+          </div>
+        </form>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/settings.js"></script>
+</body>
+</html>

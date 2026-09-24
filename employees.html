@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Employees – AttendSync</title>
+  <meta name="description" content="Manage Employee records, search with Hash Table linear probing, filter by department and risk.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div id="top-header-placeholder"></div>
+
+  <div class="app-container">
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-wrapper">
+      <div class="breadcrumb">
+        <span>AttendSync</span>
+        <span class="breadcrumb-separator">/</span>
+        <span>Supervisor Portal</span>
+        <span class="breadcrumb-separator">/</span>
+        <strong>Employee Directory &amp; Records</strong>
+      </div>
+
+      <div class="page-header">
+        <div class="page-title-group">
+          <h1>👥 Employee Management &amp; Database Roster</h1>
+          <p class="page-subtitle">Perform CRUD operations, inspect individual risk scores &amp; search via DSA Hash Table</p>
+        </div>
+        <div class="page-actions">
+          <button type="button" class="btn btn-primary" id="openAddEmployeeModalBtn">➕ Add New Employee</button>
+          <a href="reports.html" class="btn btn-secondary">📄 Export Employee Roster</a>
+        </div>
+      </div>
+
+      <!-- Hash Table / DSA Search Demo Box -->
+      <div id="dsaSearchFeedback" class="dsa-badge-banner" style="display: none;">
+        <div id="dsaSearchDetails">
+          <!-- Populated by employees.js -->
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm" id="clearDsaSearchBtn" style="padding: 1px 6px;">Clear</button>
+      </div>
+
+      <!-- Filter and Search Toolbar -->
+      <div class="filter-bar">
+        <div class="filter-item" style="flex: 1; min-width: 220px;">
+          <label for="empSearchInput">Search:</label>
+          <input type="text" id="empSearchInput" class="form-control" placeholder="Search by ID (e.g. EMP106), Name, or Role...">
+        </div>
+
+        <div class="filter-item">
+          <label for="deptFilterSelect">Department:</label>
+          <select id="deptFilterSelect" class="form-control" style="width: 140px;">
+            <option value="ALL">All Departments</option>
+            <option value="IT">IT</option>
+            <option value="HR">HR</option>
+            <option value="Finance">Finance</option>
+            <option value="Sales">Sales</option>
+            <option value="Operations">Operations</option>
+          </select>
+        </div>
+
+        <div class="filter-item">
+          <label for="riskFilterSelect">Risk Level:</label>
+          <select id="riskFilterSelect" class="form-control" style="width: 140px;">
+            <option value="ALL">All Risk Levels</option>
+            <option value="High">High Risk (&lt;75% / Absences)</option>
+            <option value="Medium">Medium Risk (Late / Missed)</option>
+            <option value="Low">Low Risk (Healthy)</option>
+          </select>
+        </div>
+
+        <div class="filter-item">
+          <label for="shiftFilterSelect">Shift:</label>
+          <select id="shiftFilterSelect" class="form-control" style="width: 120px;">
+            <option value="ALL">All Shifts</option>
+            <option value="Morning">Morning</option>
+            <option value="Evening">Evening</option>
+            <option value="Night">Night</option>
+          </select>
+        </div>
+
+        <button type="button" id="resetFiltersBtn" class="btn btn-secondary btn-sm">Reset</button>
+      </div>
+
+      <!-- Employee Directory Table Card -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <span>📋 Employee Records Database</span>
+            <span class="badge badge-blue" id="employeeCountBadge">50 Records</span>
+          </h2>
+          <div class="card-actions">
+            <span style="font-size: 11.5px; color: var(--text-muted);">Click any employee ID or name to open 30-day profile</span>
+          </div>
+        </div>
+        <div class="card-body" style="padding: 0;">
+          <div class="table-responsive" style="border: none;">
+            <table class="table-custom" id="employeesTable">
+              <thead>
+                <tr>
+                  <th class="sortable" data-sort="id">Emp ID ⬍</th>
+                  <th class="sortable" data-sort="name">Employee Name ⬍</th>
+                  <th class="sortable" data-sort="department">Department ⬍</th>
+                  <th>Designation</th>
+                  <th>Contact Information</th>
+                  <th>Shift</th>
+                  <th class="sortable" data-sort="att" style="text-align: center;">Att % ⬍</th>
+                  <th class="sortable" data-sort="risk" style="text-align: center;">Risk Score ⬍</th>
+                  <th style="text-align: center; width: 140px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="employeesTableBody">
+                <!-- Populated dynamically by employees.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
+          <span id="tablePaginationInfo">Showing 1 to 50 of 50 employee records</span>
+          <div style="font-size: 11px; color: var(--text-muted);">
+            Data stored with full CRUD &amp; local persistence
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add / Edit Employee Modal -->
+  <div class="modal-backdrop" id="employeeFormModal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-header">
+        <h3 class="modal-title" id="empModalTitle">➕ Register New Employee</h3>
+        <button type="button" class="modal-close-btn">&times;</button>
+      </div>
+      <form id="employeeForm">
+        <div class="modal-body">
+          <input type="hidden" id="formMode" value="add">
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="empIdInput">Employee ID <span class="required">*</span></label>
+              <input type="text" id="empIdInput" class="form-control" placeholder="e.g. EMP151" required>
+              <span style="font-size: 10px; color: var(--text-muted);">Unique key indexed in Hash Table</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="empNameInput">Full Name <span class="required">*</span></label>
+              <input type="text" id="empNameInput" class="form-control" placeholder="e.g. Rajesh Kumar" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="empEmailInput">Email Address <span class="required">*</span></label>
+              <input type="email" id="empEmailInput" class="form-control" placeholder="rajesh.kumar@attendsync.com" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="empPhoneInput">Phone Number <span class="required">*</span></label>
+              <input type="text" id="empPhoneInput" class="form-control" placeholder="+91 98765 00000" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="empDeptInput">Department <span class="required">*</span></label>
+              <select id="empDeptInput" class="form-control" required>
+                <option value="IT">IT</option>
+                <option value="HR">HR</option>
+                <option value="Finance">Finance</option>
+                <option value="Sales">Sales</option>
+                <option value="Operations">Operations</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="empDesigInput">Designation / Role <span class="required">*</span></label>
+              <input type="text" id="empDesigInput" class="form-control" placeholder="e.g. Software Engineer" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="empJoiningInput">Joining Date <span class="required">*</span></label>
+              <input type="date" id="empJoiningInput" class="form-control" required value="2024-01-15">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="empShiftInput">Assigned Shift <span class="required">*</span></label>
+              <select id="empShiftInput" class="form-control" required>
+                <option value="Morning">Morning (09:00 AM – 06:00 PM)</option>
+                <option value="Evening">Evening (02:00 PM – 11:00 PM)</option>
+                <option value="Night">Night (10:00 PM – 07:00 AM)</option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary modal-close-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="saveEmpBtn">Save Employee Record</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/employees.js"></script>
+</body>
+</html>

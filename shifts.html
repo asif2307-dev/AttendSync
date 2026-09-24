@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shift Rosters &amp; Coverage – AttendSync</title>
+  <meta name="description" content="Manage workforce shift schedules, monitor coverage ratios, and prevent shift understaffing.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div id="top-header-placeholder"></div>
+
+  <div class="app-container">
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-wrapper">
+      <div class="breadcrumb">
+        <span>AttendSync</span>
+        <span class="breadcrumb-separator">/</span>
+        <span>Supervisor Portal</span>
+        <span class="breadcrumb-separator">/</span>
+        <strong>Shift Rosters &amp; Coverage</strong>
+      </div>
+
+      <div class="page-header">
+        <div class="page-title-group">
+          <h1>🔄 Shift Rosters &amp; Staffing Coverage</h1>
+          <p class="page-subtitle">Monitor shift headcounts, identify understaffing deficits, and reassign workforce across rosters</p>
+        </div>
+        <div class="page-actions">
+          <button type="button" class="btn btn-primary" id="openReassignModalBtn">🔁 Reassign Employee Shift</button>
+        </div>
+      </div>
+
+      <!-- Shift Cards Summary Grid -->
+      <div class="grid-3" id="shiftCardsContainer">
+        <!-- Populated dynamically by shifts.js -->
+      </div>
+
+      <!-- Shift Roster Table Card -->
+      <div class="card" style="margin-top: 16px;">
+        <div class="card-header">
+          <h2 class="card-title">
+            <span>📋 Shift Personnel Allocation Roster</span>
+            <span class="badge badge-blue" id="rosterFilterCount">50 Employees</span>
+          </h2>
+          <div class="card-actions">
+            <select id="shiftTableFilter" class="form-control" style="width: 160px;">
+              <option value="ALL">All Shifts (50)</option>
+              <option value="Morning">Morning Shift</option>
+              <option value="Evening">Evening Shift</option>
+              <option value="Night">Night Shift</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-body" style="padding: 0;">
+          <div class="table-responsive" style="border: none;">
+            <table class="table-custom" id="shiftRosterTable">
+              <thead>
+                <tr>
+                  <th>Emp ID</th>
+                  <th>Employee Name</th>
+                  <th>Department</th>
+                  <th>Designation</th>
+                  <th>Current Shift</th>
+                  <th>Shift Timings</th>
+                  <th>Attendance Health</th>
+                  <th style="text-align: center; width: 140px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="shiftRosterTableBody">
+                <!-- Populated dynamically by shifts.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Reassign Shift Modal -->
+  <div class="modal-backdrop" id="reassignShiftModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">🔁 Reassign Employee Shift</h3>
+        <button type="button" class="modal-close-btn">&times;</button>
+      </div>
+      <form id="reassignShiftForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="reassignEmpSelect">Select Employee <span class="required">*</span></label>
+            <select id="reassignEmpSelect" class="form-control" required>
+              <!-- Populated by shifts.js -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reassignTargetShift">New Target Shift <span class="required">*</span></label>
+            <select id="reassignTargetShift" class="form-control" required>
+              <option value="Morning">Morning Shift (09:00 AM – 06:00 PM)</option>
+              <option value="Evening">Evening Shift (02:00 PM – 11:00 PM)</option>
+              <option value="Night">Night Shift (10:00 PM – 07:00 AM)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reassignReason">Reassignment Reason / Business Need <span class="required">*</span></label>
+            <textarea id="reassignReason" class="form-control" placeholder="e.g. Night shift coverage replenishment, customer support escalation..." required rows="2"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary modal-close-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Shift Reassignment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/shifts.js"></script>
+</body>
+</html>

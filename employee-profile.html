@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Attendance Profile – AttendSync</title>
+  <meta name="description" content="Detailed 30-day employee attendance record, risk breakdown, and supervisor decision support.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div id="top-header-placeholder"></div>
+
+  <div class="app-container">
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-wrapper">
+      <div class="breadcrumb">
+        <span>AttendSync</span>
+        <span class="breadcrumb-separator">/</span>
+        <a href="employees.html">Employees</a>
+        <span class="breadcrumb-separator">/</span>
+        <strong id="profileBreadcrumbName">Employee Profile</strong>
+      </div>
+
+      <div class="page-header">
+        <div class="page-title-group">
+          <h1>👤 <span id="profileEmpName">Rahul Kumar</span> <span style="font-size: 14px; color: var(--text-muted);" id="profileEmpId">(EMP101)</span></h1>
+          <p class="page-subtitle" id="profileEmpSubtitle">Senior Software Engineer • IT Department</p>
+        </div>
+        <div class="page-actions">
+          <a href="employees.html" class="btn btn-secondary">← Back to Employee List</a>
+          <button type="button" class="btn btn-primary" id="openActionPanelBtn">⚡ Record Supervisor Action</button>
+        </div>
+      </div>
+
+      <!-- Employee Overview Card -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">📋 Employee Master Record Details</h2>
+          <div>
+            <span class="badge badge-present" id="profileStatusBadge">Active Roster</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="grid-3" style="font-size: 12.5px;">
+            <div>
+              <div style="color: var(--text-muted); font-size: 11px;">Department &amp; Designation</div>
+              <div style="font-weight: 600;" id="profileDeptDesig">IT — Senior Software Engineer</div>
+            </div>
+            <div>
+              <div style="color: var(--text-muted); font-size: 11px;">Email Address</div>
+              <div style="font-weight: 600;" id="profileEmail">rahul.kumar@attendsync.com</div>
+            </div>
+            <div>
+              <div style="color: var(--text-muted); font-size: 11px;">Contact Phone</div>
+              <div style="font-weight: 600;" id="profilePhone">+91 98765 43210</div>
+            </div>
+            <div>
+              <div style="color: var(--text-muted); font-size: 11px;">Joining Date</div>
+              <div style="font-weight: 600;" id="profileJoiningDate">15 Mar 2022</div>
+            </div>
+            <div>
+              <div style="color: var(--text-muted); font-size: 11px;">Assigned Shift</div>
+              <div style="font-weight: 600;" id="profileShift">Morning (09:00 AM – 06:00 PM)</div>
+            </div>
+            <div>
+              <div style="color: var(--text-muted); font-size: 11px;">DSA Hash Index</div>
+              <div style="font-weight: 600; color: var(--color-blue-primary);" id="profileHashLocation">Bucket #34 (O(1) Indexed)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 30-Day Attendance KPI Stats -->
+      <div class="stats-grid">
+        <div class="stat-tile tile-neutral">
+          <div class="stat-tile-label">30-Day Attendance %</div>
+          <div class="stat-tile-value" id="kpiProfileAttPct">68.0%</div>
+          <div class="stat-tile-meta">
+            <span>Evaluated Period</span>
+            <span id="kpiProfileAttBadge">Low</span>
+          </div>
+        </div>
+
+        <div class="stat-tile tile-present">
+          <div class="stat-tile-label">Present Days</div>
+          <div class="stat-tile-value" id="kpiProfilePresent" style="color: var(--status-present);">18</div>
+          <div class="stat-tile-meta">
+            <span>On-Time &amp; WFH</span>
+            <span>Recorded</span>
+          </div>
+        </div>
+
+        <div class="stat-tile tile-absent">
+          <div class="stat-tile-label">Absent Days</div>
+          <div class="stat-tile-value" id="kpiProfileAbsent" style="color: var(--status-absent);">7</div>
+          <div class="stat-tile-meta">
+            <span>Unplanned Absences</span>
+            <span style="color: var(--status-absent); font-weight: bold;">Action Needed</span>
+          </div>
+        </div>
+
+        <div class="stat-tile tile-late">
+          <div class="stat-tile-label">Late Arrivals</div>
+          <div class="stat-tile-value" id="kpiProfileLate" style="color: var(--status-late);">2</div>
+          <div class="stat-tile-meta">
+            <span>Grace Period Exceeded</span>
+            <span>Recorded</span>
+          </div>
+        </div>
+
+        <div class="stat-tile tile-leave">
+          <div class="stat-tile-label">Approved Leaves</div>
+          <div class="stat-tile-value" id="kpiProfileLeaves" style="color: var(--status-leave);">2</div>
+          <div class="stat-tile-meta">
+            <span>Sick / Casual Leaves</span>
+            <span>Approved</span>
+          </div>
+        </div>
+
+        <div class="stat-tile tile-risk">
+          <div class="stat-tile-label">Calculated Risk Score</div>
+          <div class="stat-tile-value" id="kpiProfileRiskScore" style="color: var(--status-absent);">72</div>
+          <div class="stat-tile-meta">
+            <span>Scale: 0 – 100</span>
+            <span class="badge badge-high-risk" id="kpiProfileRiskBadge">High Risk</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Risk Analysis & Decision Support Banner -->
+      <div class="card" id="riskAnalysisCard">
+        <div class="card-header" style="background-color: #fff1f2;">
+          <h2 class="card-title" style="color: #991b1b;">
+            <span>🧠 Explainable Risk Analysis &amp; Supervisor Recommendation</span>
+          </h2>
+          <span class="badge badge-high-risk" id="riskAnalysisBadge">Action Required</span>
+        </div>
+        <div class="card-body">
+          <div class="grid-2">
+            <div>
+              <div style="font-weight: 600; margin-bottom: 6px; color: var(--color-navy);">Rule Triggers &amp; Detected Anomalies:</div>
+              <ul id="riskReasonsList" style="padding-left: 20px; font-size: 12px; line-height: 1.6; color: #7f1d1d;">
+                <!-- Populated dynamically -->
+              </ul>
+            </div>
+            <div style="background-color: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 12px;">
+              <div style="font-weight: 600; margin-bottom: 4px; color: var(--color-navy);">Recommended Supervisor Decision:</div>
+              <p style="font-size: 12px; margin-bottom: 8px;" id="riskRecommendedText">
+                Schedule formal 1-on-1 performance review &amp; issue attendance warning.
+              </p>
+              <button type="button" class="btn btn-danger btn-sm" id="riskDirectActionBtn">Execute Recommendation →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Supervisor Action & Notes Log for this Employee -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">📝 Supervisor Action History &amp; Remarks Log</h2>
+          <button type="button" class="btn btn-primary btn-sm" id="addRemarkModalBtn">➕ Add Remark / Warning</button>
+        </div>
+        <div class="card-body" style="padding: 0;">
+          <div class="table-responsive" style="border: none;">
+            <table class="table-custom">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Supervisor</th>
+                  <th>Triggering Issue</th>
+                  <th>Action / Decision</th>
+                  <th>Supervisor Remark &amp; Notes</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="employeeActionLogBody">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 30-Day Attendance Records Table -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">📅 30-Day Detailed Attendance Log (23 Aug 2026 – 21 Sep 2026)</h2>
+          <div class="card-actions">
+            <span style="font-size: 11px; color: var(--text-muted);">Historical Daily Punch Records</span>
+          </div>
+        </div>
+        <div class="card-body" style="padding: 0;">
+          <div class="table-responsive" style="border: none;">
+            <table class="table-custom">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Day</th>
+                  <th>Check-In</th>
+                  <th>Check-Out</th>
+                  <th>Working Hours</th>
+                  <th>Status</th>
+                  <th>Remarks / Anomaly Details</th>
+                </tr>
+              </thead>
+              <tbody id="profileAttendanceTableBody">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Supervisor Action Modal -->
+  <div class="modal-backdrop" id="profileActionModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">⚡ Record Supervisor Action</h3>
+        <button type="button" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label" for="profileActionType">Action Type <span class="required">*</span></label>
+          <select id="profileActionType" class="form-control" required>
+            <option value="Formal Warning Recorded">Record Formal Written Warning</option>
+            <option value="Supervisor Follow-up">Schedule 1-on-1 Counseling / Follow-up</option>
+            <option value="Escalated to HR">Escalate Issue to HR Department</option>
+            <option value="Contacted Employee">Contact Employee via Phone / Email</option>
+            <option value="Remark Added">General Supervisor Remark / Observation</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="profileActionRemark">Supervisor Justification &amp; Notes <span class="required">*</span></label>
+          <textarea id="profileActionRemark" class="form-control" placeholder="Enter supervisor notes, employee explanation, or counseling details..." required rows="4"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary modal-close-btn">Cancel</button>
+        <button type="button" id="submitProfileActionBtn" class="btn btn-primary">Save Decision</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+</html>

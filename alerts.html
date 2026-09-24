@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alert Center &amp; Risk Management – AttendSync</title>
+  <meta name="description" content="Centralized supervisor alert center, risk scores, attendance triggers, and direct decision support workflows.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div id="top-header-placeholder"></div>
+
+  <div class="app-container">
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-wrapper">
+      <div class="breadcrumb">
+        <span>AttendSync</span>
+        <span class="breadcrumb-separator">/</span>
+        <span>Supervisor Decision Support</span>
+        <span class="breadcrumb-separator">/</span>
+        <strong>Alert Center &amp; Risk Scores</strong>
+      </div>
+
+      <div class="page-header">
+        <div class="page-title-group">
+          <h1>🚨 Supervisor Alert Center &amp; Risk Scores</h1>
+          <p class="page-subtitle">Prioritized attendance risk alerts with direct supervisor action &amp; escalation workflows</p>
+        </div>
+        <div class="page-actions">
+          <a href="monitoring.html" class="btn btn-secondary">🧠 Smart Monitoring Matrix</a>
+          <a href="audit.html" class="btn btn-primary">📋 Audit Trail</a>
+        </div>
+      </div>
+
+      <!-- Alert Metric Cards -->
+      <div class="stats-grid">
+        <div class="stat-tile tile-risk">
+          <div class="stat-tile-label">High Risk Alerts</div>
+          <div class="stat-tile-value" id="countHighAlerts" style="color: var(--status-absent);">0</div>
+          <div class="stat-tile-meta">
+            <span>Score: 61 – 100</span>
+            <span style="color: var(--status-absent); font-weight: 700;">Immediate Action</span>
+          </div>
+        </div>
+
+        <div class="stat-tile tile-late">
+          <div class="stat-tile-label">Medium Risk Alerts</div>
+          <div class="stat-tile-value" id="countMedAlerts" style="color: var(--status-late);">0</div>
+          <div class="stat-tile-meta">
+            <span>Score: 31 – 60</span>
+            <span>Counseling / Review</span>
+          </div>
+        </div>
+
+        <div class="stat-tile tile-present">
+          <div class="stat-tile-label">Low Risk Workforce</div>
+          <div class="stat-tile-value" id="countLowAlerts" style="color: var(--status-present);">0</div>
+          <div class="stat-tile-meta">
+            <span>Score: 0 – 30</span>
+            <span>Normal Compliance</span>
+          </div>
+        </div>
+
+        <div class="stat-tile tile-neutral">
+          <div class="stat-tile-label">Total Evaluated</div>
+          <div class="stat-tile-value" id="countTotalEvaluated">50</div>
+          <div class="stat-tile-meta">
+            <span>30-Day Window</span>
+            <span>Updated Real-time</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <div class="filter-item">
+          <label for="alertSeverityFilter">Severity Level:</label>
+          <select id="alertSeverityFilter" class="form-control" style="width: 160px;">
+            <option value="ALL">All Risk Levels</option>
+            <option value="High">High Risk Only (Critical)</option>
+            <option value="Medium">Medium Risk Only</option>
+            <option value="Low">Low Risk (Compliant)</option>
+          </select>
+        </div>
+
+        <div class="filter-item">
+          <label for="alertDeptFilter">Department:</label>
+          <select id="alertDeptFilter" class="form-control" style="width: 140px;">
+            <option value="ALL">All Departments</option>
+            <option value="IT">IT</option>
+            <option value="HR">HR</option>
+            <option value="Finance">Finance</option>
+            <option value="Sales">Sales</option>
+            <option value="Operations">Operations</option>
+          </select>
+        </div>
+
+        <div class="filter-item" style="flex: 1; min-width: 180px;">
+          <input type="text" id="alertSearchInput" class="form-control" placeholder="Search employee, ID or alert trigger...">
+        </div>
+
+        <button type="button" class="btn btn-secondary btn-sm" id="resetAlertsBtn">Reset</button>
+      </div>
+
+      <!-- Alerts List Table Card -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <span>📋 Prioritized Attendance Risk &amp; Alert Queue</span>
+            <span class="badge badge-blue" id="alertQueueCountBadge">0 Alerts</span>
+          </h2>
+          <div class="card-actions">
+            <span style="font-size: 11px; color: var(--text-muted);">Risk Score = f(Attendance %, Late Counts, Consecutive Absences, Missed Punches)</span>
+          </div>
+        </div>
+        <div class="card-body" style="padding: 0;">
+          <div class="table-responsive" style="border: none;">
+            <table class="table-custom" id="alertsTable">
+              <thead>
+                <tr>
+                  <th style="width: 80px;">Emp ID</th>
+                  <th>Employee Name</th>
+                  <th>Department</th>
+                  <th style="text-align: center;">Risk Score</th>
+                  <th>Severity</th>
+                  <th>Identified Trigger &amp; Impact</th>
+                  <th>Supervisor Decision Path</th>
+                  <th style="text-align: center; width: 140px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="alertsTableBody">
+                <!-- Populated dynamically by alerts.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
+          <span>Taking action marks the alert with supervisor justification notes in the system audit log</span>
+          <a href="reports.html" style="font-weight: 600;">Generate Risk Summary Report →</a>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Supervisor Action Modal -->
+  <div class="modal-backdrop" id="alertDialogActionModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">⚡ Supervisor Decision Center</h3>
+        <button type="button" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="alert-box alert-warning" id="alertProblemBox">
+          <!-- Problem context -->
+        </div>
+
+        <input type="hidden" id="alertEmpId">
+        <input type="hidden" id="alertEmpName">
+        <input type="hidden" id="alertIssueText">
+
+        <div class="form-group">
+          <label class="form-label">Employee</label>
+          <div style="font-weight: 600; padding: 6px 8px; background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: var(--radius-sm);" id="alertEmployeeLabel">
+            -
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="alertSupervisorDecision">Supervisor Action / Decision <span class="required">*</span></label>
+          <select id="alertSupervisorDecision" class="form-control" required>
+            <option value="Formal Warning Recorded">Record Formal Written Warning</option>
+            <option value="Supervisor Follow-up">Schedule 1-on-1 Counseling / Follow-up</option>
+            <option value="Escalated to HR">Escalate Issue to HR Department</option>
+            <option value="Contacted Employee">Contact Employee via Mobile Phone</option>
+            <option value="Marked as Resolved">Mark Alert as Reviewed &amp; Resolved</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="alertSupervisorRemark">Supervisor Remark &amp; Justification <span class="required">*</span></label>
+          <textarea id="alertSupervisorRemark" class="form-control" placeholder="Enter conversation record, warning justification, or follow-up notes..." required rows="3"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary modal-close-btn">Cancel</button>
+        <button type="button" id="saveAlertActionBtn" class="btn btn-primary">Save Decision &amp; Log</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/alerts.js"></script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Monitoring &amp; Anomaly Detection – AttendSync</title>
+  <meta name="description" content="Rule-based anomaly detection, chronic absenteeism alerts, consecutive absence tracking, and supervisor decision support.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div id="top-header-placeholder"></div>
+
+  <div class="app-container">
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-wrapper">
+      <div class="breadcrumb">
+        <span>AttendSync</span>
+        <span class="breadcrumb-separator">/</span>
+        <span>Supervisor Decision Support</span>
+        <span class="breadcrumb-separator">/</span>
+        <strong>Smart Monitoring Suite</strong>
+      </div>
+
+      <div class="page-header">
+        <div class="page-title-group">
+          <h1>🧠 Smart Attendance Monitoring &amp; Decision Support</h1>
+          <p class="page-subtitle">Rule-based pattern analysis: answer "Which employees need attention, what is the problem, and what action to take?"</p>
+        </div>
+        <div class="page-actions">
+          <a href="alerts.html" class="btn btn-secondary">🚨 Open Risk Alerts</a>
+          <a href="reports.html" class="btn btn-primary">📄 Anomaly Report</a>
+        </div>
+      </div>
+
+      <!-- Rule Summary Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-tile tile-risk">
+          <div class="stat-tile-label">Attendance &lt; 75%</div>
+          <div class="stat-tile-value" id="ruleLowAttCount" style="color: var(--status-absent);">0</div>
+          <div class="stat-tile-meta">
+            <span>Chronic Absenteeism</span>
+            <span class="badge badge-high-risk">High Risk</span>
+          </div>
+        </div>
+
+        <div class="stat-tile tile-risk">
+          <div class="stat-tile-label">3+ Consecutive Absences</div>
+          <div class="stat-tile-value" id="ruleConsecCount" style="color: var(--status-absent);">0</div>
+          <div class="stat-tile-meta">
+            <span>Unannounced Stoppage</span>
+            <span class="badge badge-high-risk">Urgent</span>
+          </div>
+        </div>
+
+        <div class="stat-tile tile-late">
+          <div class="stat-tile-label">Frequent Late Arrivals</div>
+          <div class="stat-tile-value" id="ruleLateCount" style="color: var(--status-late);">0</div>
+          <div class="stat-tile-meta">
+            <span>&ge; 4 Late Punches</span>
+            <span class="badge badge-medium-risk">Counseling</span>
+          </div>
+        </div>
+
+        <div class="stat-tile tile-late">
+          <div class="stat-tile-label">Missing Punches</div>
+          <div class="stat-tile-value" id="ruleMissingCount" style="color: #92400e;">0</div>
+          <div class="stat-tile-meta">
+            <span>Incomplete Swipes</span>
+            <span class="badge badge-medium-risk">Review</span>
+          </div>
+        </div>
+
+        <div class="stat-tile tile-neutral">
+          <div class="stat-tile-label">Sudden Drops (&gt;15%)</div>
+          <div class="stat-tile-value" id="ruleDropCount">0</div>
+          <div class="stat-tile-meta">
+            <span>Bi-weekly Velocity</span>
+            <span class="badge badge-medium-risk">Investigate</span>
+          </div>
+        </div>
+
+        <div class="stat-tile tile-neutral">
+          <div class="stat-tile-label">Shift Understaffing</div>
+          <div class="stat-tile-value" id="ruleShiftCount">1</div>
+          <div class="stat-tile-meta">
+            <span>Night Shift Shortage</span>
+            <span class="badge badge-medium-risk">Roster</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Explainable Rule Criteria Banner -->
+      <div class="dsa-badge-banner">
+        <div>
+          <strong>⚙️ Deterministic Rule Engine:</strong> Algorithms continuously evaluate all 50 employee matrices against strict policy thresholds. Every flagged issue provides an explainable reason and actionable supervisor decision path.
+        </div>
+      </div>
+
+      <!-- Filter Bar for Anomalies -->
+      <div class="filter-bar">
+        <div class="filter-item">
+          <label for="ruleCategoryFilter">Rule Category:</label>
+          <select id="ruleCategoryFilter" class="form-control" style="width: 220px;">
+            <option value="ALL">All Monitored Anomalies</option>
+            <option value="LOW_ATT">Low Attendance (&lt; 75%)</option>
+            <option value="CONSECUTIVE">3+ Consecutive Absences</option>
+            <option value="FREQUENT_LATE">Frequent Late Arrivals (&ge; 4)</option>
+            <option value="MISSING_PUNCH">Missing Biometric Punches</option>
+            <option value="SUDDEN_DROP">Sudden Attendance Velocity Drop</option>
+            <option value="SHIFT">Shift Understaffing</option>
+          </select>
+        </div>
+
+        <div class="filter-item">
+          <label for="monDeptFilter">Department:</label>
+          <select id="monDeptFilter" class="form-control" style="width: 140px;">
+            <option value="ALL">All Departments</option>
+            <option value="IT">IT</option>
+            <option value="HR">HR</option>
+            <option value="Finance">Finance</option>
+            <option value="Sales">Sales</option>
+            <option value="Operations">Operations</option>
+          </select>
+        </div>
+
+        <div class="filter-item" style="flex: 1; min-width: 180px;">
+          <input type="text" id="monSearchInput" class="form-control" placeholder="Search employee name, ID or reason...">
+        </div>
+
+        <button type="button" class="btn btn-secondary btn-sm" id="resetMonFilterBtn">Reset</button>
+      </div>
+
+      <!-- Anomaly Decision Support Table -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <span>⚠️ Identified Issues &amp; Recommended Supervisor Actions</span>
+            <span class="badge badge-blue" id="monTotalBadge">0 Flagged Cases</span>
+          </h2>
+          <div class="card-actions">
+            <span style="font-size: 11px; color: var(--text-muted);">Real-time evaluated against active attendance records</span>
+          </div>
+        </div>
+        <div class="card-body" style="padding: 0;">
+          <div class="table-responsive" style="border: none;">
+            <table class="table-custom" id="monitoringTable">
+              <thead>
+                <tr>
+                  <th>Emp ID</th>
+                  <th>Employee Name</th>
+                  <th>Department</th>
+                  <th>Detected Issue</th>
+                  <th>Severity</th>
+                  <th>Rule Trigger &amp; Evidence</th>
+                  <th>Recommended Supervisor Action</th>
+                  <th style="text-align: center; width: 120px;">Decision</th>
+                </tr>
+              </thead>
+              <tbody id="monitoringTableBody">
+                <!-- Populated dynamically by monitoring.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
+          <span>All supervisor decisions are logged permanently to the Audit Trail</span>
+          <a href="audit.html" style="font-weight: 600;">View Action History →</a>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Supervisor Action Modal -->
+  <div class="modal-backdrop" id="monActionModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="monModalTitle">⚡ Take Supervisor Action</h3>
+        <button type="button" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="alert-box alert-warning" id="monModalAlert">
+          <!-- Problem context -->
+        </div>
+
+        <input type="hidden" id="monEmpId">
+        <input type="hidden" id="monEmpName">
+        <input type="hidden" id="monIssue">
+
+        <div class="form-group">
+          <label class="form-label">Employee Details</label>
+          <div style="font-weight: 600; padding: 6px 8px; background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: var(--radius-sm);" id="monEmpDetails">
+            -
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="monActionDecision">Supervisor Decision <span class="required">*</span></label>
+          <select id="monActionDecision" class="form-control" required>
+            <option value="Formal Warning Recorded">Record Formal Written Warning</option>
+            <option value="Supervisor Follow-up">Schedule 1-on-1 Counseling / Follow-up</option>
+            <option value="Escalated to HR">Escalate Incident to HR Department</option>
+            <option value="Contacted Employee">Contact Employee via Mobile Phone / Email</option>
+            <option value="Marked as Resolved">Mark Anomaly as Reviewed &amp; Resolved</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="monActionRemark">Supervisor Justification Notes <span class="required">*</span></label>
+          <textarea id="monActionRemark" class="form-control" placeholder="Enter notes regarding conversation, counseling reason or supervisor directive..." required rows="3"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary modal-close-btn">Cancel</button>
+        <button type="button" id="saveMonActionBtn" class="btn btn-primary">Save &amp; Log Decision</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/monitoring.js"></script>
+</body>
+</html>
